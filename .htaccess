@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^wishes\.cekuj\.net$
+RewriteRule ^$ www/ [L]
+RewriteCond %{HTTP_HOST} ^wishes\.cekuj\.net$
+RewriteRule (.*) www/$1 [L]

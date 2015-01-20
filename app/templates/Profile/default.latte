@@ -1,0 +1,220 @@
+{block content}
+<link rel="stylesheet" href="{$basePath}/libraries/jquery-editable/css/jquery-editable.css" type='text/css'>
+<div id="friends" class="modal">
+	<h4>Friends</h4>
+	<hr>
+	{foreach $friends as $f}
+		<div class="row">
+			<div class="col s12 m12 l12">
+				<a n:href="Profile: $f->friend_id">
+					<div class="card-panel teal">
+						<span class="white-text">{$f->ref("friend_id")->name." ".$f->ref("friend_id")->surname}</span>
+					</div>
+				</a>
+			</div>
+		</div>
+	{/foreach}
+	<hr>
+	<a href="#" class="waves-effect btn-flat modal-close">Close</a>
+</div>
+	<div class="row">
+		<div class="col s12 m12 l4" n:snippet="profile">
+			<div class="z-depth-2 card-panel">
+			    	<div class="row">
+			    		<div class="col l12 m12 s12">
+			    		<p style="text-align: center;">	
+			    		{if $userDetails->profile_image}
+							<img class="responsive-img materialboxed profilePhoto" src="{$basePath}/images/upload/profile/{$userDetails->profile_image}.png" />
+						{else}
+							<img class="responsive-img materialboxed profilePhoto" src="{$basePath}/images/profile.png" />
+						{/if}
+						</p>
+						</div>
+						<div class="col l12 m12 s12 profileName">
+							<h5>{$userDetails->name." ".$userDetails->surname}</h5>
+						</div>
+						<div class="buttons col l12 m12 s12" >
+							<a n:href="addFriend! friend_id=>$userDetails->id" class="waves-effect waves-light btn col l12 m12 s12 button-green ajax" n:if="$userDetails->id != $presenter->user->id && !$presenter->isFriend($userDetails->id)"><span class="mdi-social-person-add"></span><span>&nbsp;Follow</span></a>
+							<a class="waves-effect waves-light btn col l12 m12 s12 button-green modal-trigger" href="#friends"><span class="mdi-social-people"></span><span>&nbsp;following - {$friends->count()}</span></a>
+						</div>
+					</div>
+			</div>
+		</div>
+		<div class="col s12 m12 l8 ">
+			<div class="z-depth-2 card-panel">
+				<div class="row">
+					<div class="col s12">
+						<ul class="tabs" id="tabs">
+							<li data="date" class="tab col s3 ajax"><a class="sort">datum</a></li>
+							<li data="price" class="tab col s3 ajax"><a class="sort">Cena</a></li>
+							<li data="abc" class="tab col s3 ajax"><a class="sort">Abeceda</a></li>
+						</ul>
+					</div>
+				</div>
+				{snippet wishe}
+				<script>
+					$('.collapsible').collapsible();
+					
+				</script>
+				<div class="row valign-wrapper">
+			    	<ul class="collapsible col l12 m12 s12" id="sortable"  >
+			    		{if $userDetails->id == $presenter->user->id}
+				    		<li id="addWish" class="ui-state-default ui-state-disabled" n:if="$userDetails->id == $presenter->user->id && $wishes">
+				    			<div class="collapsible-header" style="color: #00770B"><i class="mdi-content-add-box"></i>Add wish</div>
+								<div class="collapsible-body">
+									<div class="col l12 m12 s12" style="margin-top: 35px;">
+										<div class="row">
+											{form addWishForm}
+												<div class="col l6 m12 s12">
+													<div class="col s12 m12 l12 input-field">
+														{label name /}{input name}
+													</div>
+													<div class="col s12 m12 l12 input-field" style="margin-top: 15px;">
+														{label link /}{input link}
+													</div>
+													{input image}
+													<div class="col s12 input-field" style="margin-top: 30px;">
+														{input send}
+													</div>
+												</div>
+												<img class="col l6 m12 s12 imgUpload" id="preview" style="display: none; cursor: pointer;" />
+												<div class="col l6 m12 s12 valign-wrapper imgUpload" id="imgUpload" style="cursor: pointer; height: 200px; background: grey">
+													Upload Image
+												</div>
+											{/form}
+										</div>
+									</div>
+									<div class="col l12 m12 s12">
+										<p style="text-align: center;"></p>
+									</div>
+								</div>
+				   			</li>
+			    		{/if}
+							{foreach $wishes as $w}
+								<li class="ui-state-default" id="{$w->id}" >
+									<div class="collapsible-header" id="{$w->id}">
+										<i class="mdi-action-wallet-giftcard"></i>{$w->name} - {$w->price}€
+										{if $userDetails->id == $presenter->user->id}
+											<a n:href="deleteWish! delete_id=>$w->id" class="ajax" style="color: black">
+												<i class="mdi-action-delete" style="float: right"></i>
+											</a>
+											<i class="mdi-editor-mode-edit editWish" data-target="{$w->id}" style="float: right; margin-right:10px"></i>
+										{/if}
+									</div>
+									<div class="collapsible-body" >
+											<div>
+												<div class="col l12 m12 s12" style="text-align:center; padding-top: 20px;"> 
+													<a href="http://{$w->link}">
+														{$w->link}
+													</a>
+												</div>
+												<div class="col l12 m12 s12">
+													<p style="text-align: center;">
+														{if $w->image}
+															<img class="responsive-img" src="{$basePath}/images/upload/wishes/{$w->image}.png"/>
+														{else}
+															<img class="responsive-img" src="{$basePath}/images/gift.png"/>
+														{/if}
+													</p>
+												</div>
+											</div>
+											{* 
+											<div class="row"  id="edit{$w->id}">
+												<div class="col l12 m12 s12" style="text-align:center; padding-top: 20px;"> 
+													<a class="xeditable-class" href="{$w->link}">
+														{$w->link}
+													</a>
+												</div>
+												<div class="col l12 m12 s12">
+													<p style="text-align: center;">
+														{if $w->image}
+															<div class="imageContainer responsive-img" style="background-image: url({$basePath}/images/upload/wishes/{$w->image}.png)">Some Text</div>
+														{else}
+															<div class=" responsive-img" style="background-image: url({$basePath}/images/gift.png) no-repeat 100% 100%">Some Text</div>
+														{/if}
+													</p>
+												</div>
+											</div> 
+											*}
+									</div>
+								</li>
+							{/foreach}
+					</ul>
+				</div>
+				<script>
+					$("#frm-addWishForm-image").css("display","none");
+			    	$(".imgUpload").click(function(){
+			    		$("#frm-addWishForm-image").click();
+			    	});
+				</script>
+				{/snippet}
+			</div>
+		</div>
+		<div id="addWish" class="modal">
+			<h4>Add Wish</h4>
+			<div class="row">
+				{form addWishForm}
+					<div class="col l6 m12 s12">
+						<div class="col s12 input-field">
+							{label name /}{input name}
+						</div>
+						<div class="col s12 input-field">
+							{label link /}{input link}
+						</div>
+						<div class="col s12" style="margin-bottom: 5px;">
+							{label image /}
+						</div>
+						<div class="col s12 input-field">
+							{input image}
+						</div>
+						<div class="col s12 input-field" style="margin-top: 35px;">
+							{input send}
+						</div>
+					</div>
+					<img class="col l6 m12 s12" id="preview" style="display: none;" />
+				{/form}
+			</div>
+			<br>
+		</div>
+	</div>
+{/block}
+{block scripts}
+{include parent}
+<script src="{$basePath}/libraries/jquery-editable/js/jquery-editable-poshytip.js"></script>
+<script type="text/javascript">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#preview').attr('src', e.target.result);
+                $('#preview').css("display","block");
+                $('#imgUpload').css("display","none");
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(document).ready(function(){
+    	document.ontouchmove = function(e){ return true; }
+    	/////xeditable start
+	    	$.fn.editable.defaults.mode = 'inline';
+	    	$.fn.editableform.buttons = '<div class="col l8 m12 s12"><button type="submit" class="btn-floating btn button-green waves-effect waves-light !important editable-submit"><i class="mdi-action-done"></i></button>' + '<button type="button" class="btn-floating btn red waves-effect waves-light !important editable-cancel"><i class="mdi-content-clear"></i></button></div>'; 
+	    	$('.xeditable-class').editable({});
+    	/////xeditable end
+  	
+    	$(".tab").on('click',function(event){
+    		var x = $(this).attr("data");
+    		$("#snippet-wishe").load(this.href+$.now());
+    		$.nette.ajax({
+	    	    url: this.href,
+	    	    async: false,
+		    	type: 'GET',
+		    	data: {
+		    		type: x,
+		    		do: '{!sortWishes}'
+		    	}
+		    });	
+    	});
+    	
+    });
+</script>
+{/block}

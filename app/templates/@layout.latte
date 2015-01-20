@@ -1,0 +1,136 @@
+{***********************************************************************}
+
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+ *}
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+		<title>{ifset #title}{include title|striptags} | {/ifset}WISHES</title>
+		<link rel="shortcut icon" href="{$basePath}/favicon.ico">
+		<link rel="stylesheet" href="{$basePath}/css/flags.css" type='text/css'>
+		<link rel="stylesheet" href="{$basePath}/libraries/materialize/css/materialize.css" type='text/css'>
+		<link rel="stylesheet" href="{$basePath}/css/style.css" />
+		{block head}{/block}
+	</head>
+	{block scripts}
+		<script src="{$basePath}/js/jquery-2.1.0.js" language="JavaScript" type="text/javascript"></script>
+		{* <script src="{$basePath}/js/jquery.nette.js"></script> *}
+		<script src="{$basePath}/js/nette.ajax.js"></script>
+		<script src="{$basePath}/js/netteForms.js"></script>
+		<script src="{$basePath}/js/redactor.min.js"></script>
+		<script src="{$basePath}/js/jquery-ui.js"></script>
+		<script src="{$basePath}/libraries/materialize/js/materialize.js"></script>
+
+		<script n:syntax="off">
+			$(document).ready(function(){
+				$.nette.init();
+				$('.datepicker').pickadate({
+					format: 'd.m.yyyy',
+					focused: false
+				});
+				$(".dropdown-button").dropdown({hover: false, constrain_width: false});
+				$('select').material_select();
+				$('.modal-trigger').leanModal();
+				$('.materialboxed').materialbox();
+				$(".button-collapse").sideNav();
+				$('.collapsible').collapsible();
+				$('ul.tabs').tabs();
+			});
+			
+		</script>
+	{/block}
+	<body class="grey lighten-3">
+		<nav>
+			<div class="nav-wrapper" style="text-transform: capitalize">
+				<a n:href="Homepage:" class="brand-logo"><img class="col-md-2 logo" src="{$basePath}/images/logo.png" /></a>
+				<ul class="right side-nav" id="nav-mobile" n:if="$user->isLoggedIn()">
+					<li>
+						<a class="waves-effect waves-light" n:href="Homepage:">
+							{_messages.layout.home}
+						</a>
+					</li>
+					<li>
+						<a class="waves-effect waves-light" n:href="Profile: $user->id">
+							{_messages.layout.wishlist}
+						</a>
+					</li>
+					<li>
+						<a class="waves-effect waves-light" n:href="Settings:">
+							{_messages.layout.settings}
+						</a>
+					</li>
+					<li>
+						<a class="waves-effect waves-light" n:href="Sign:out" class=" valign-wrapper">
+							{_messages.layout.logout}
+						</a>
+					</li>
+				</ul>
+				<a class="button-collapse" href="#" data-activates="nav-mobile" n:if="$user->isLoggedIn()"><i class="mdi-navigation-menu"></i></a>
+			</div>
+		</nav>
+		{* <header>
+					<div class="row">
+						<div class="header">
+							<div class="row">
+								<div class="col-md-3 name">
+								{ifCurrent "Sign:up"}
+									{_messages.layout.registration}
+								{else}
+									{if !$user->isLoggedIn()}
+										{_messages.layout.login}
+									{else}
+										{ifCurrent "Sign:upInformations"}
+											{_messages.layout.informations}
+										{else}
+											{$name}
+										{/ifCurrent}
+									{/if}
+								{/ifCurrent}
+									WISHES
+								</div>
+								<div class="col-md-2"></div>
+								<menu class="col-md-3">
+									{if $user->isLoggedIn()}
+										<ul class="nav nav-pills navbar-left">
+											<li role="presentation" title="{_messages.layout.home}"><a href="#"><img class="menu-image"  src="/images/menu/home_white.png"/></a></li>
+											<li role="presentation"  title="{_messages.layout.wishlist}"><a href="#"><img class="menu-image" src="/images/menu/list_white.png"/></a></li>
+											<li role="presentation" title="{_messages.layout.settings}"><a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-expanded="false"><img class="menu-image" style="margin-right:5px" src="/images/menu/settings_white.png"/><span class="caret"></span></a>
+												<ul class="dropdown-menu" role="menu">
+													<li><a n:href="Profile:">Profile</a></li>
+												</ul>
+											</li>
+											<li role="presentation"><a n:href="Sign:out"><img class="menu-image" title="{_messages.layout.logout}" src="/images/menu/logout_white.png"/></a></li>
+										</ul>
+									{/if}
+								</menu>
+								<div class="col-md-2"></div>
+								<img class="col-md-2 logo" src="/images/logo.png" />
+							</div>
+						</div>
+					</div>
+				</header> *}
+		<div class="row">
+			<section id="flashes">
+				<div class="container">
+					<div n:foreach="$flashes as $flash" class="{$flash->type}" style="text-align: center">
+						<script n:if="$flash->message != null">
+							toast({$flash->message},40000);
+						</script>
+					</div>
+				</div>
+			</section>
+		</div>
+		<div class="container">
+		    <div class="section">
+				<div class="row" style="margin-top: 50px;">
+					{block content}{/block}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

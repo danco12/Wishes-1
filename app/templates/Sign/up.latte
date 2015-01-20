@@ -1,0 +1,54 @@
+{block content}
+<br><br>
+{form signUpForm}
+		<div class="row">
+			<div class="input-field col s12 m6 l6">
+				{label email /}{input email}
+			</div>
+			<div class="input-field col s12 m6 l6">
+				{label password /}{input password}
+			</div>
+		</div>
+		<br>
+		<div class="row">
+			<div class="col s12 m6 l8">
+				<p>
+				{$form['agree']->controlPart} <label for="frm-signUpForm-agree">suhlasim s <a href="#podmienky" class="modal-trigger"> podmienkami </a></label>
+				</p>
+			</div>
+			<div class="col s12 m6 l4 waves-input-wrapper">
+				<a class="col l12 waves-effect waves-light btn button-green" id="submit"> Submit </a>
+				{input send}
+			</div>
+		</div>
+		
+{/form}
+<div id="podmienky" class="modal">
+    <h4>Podmienky</h4>
+    <p>podmienky podmienky podmienky podmienky podmienky podmienky podmienky podmienky podmienky podmienky podmienky podmienky podmienky</p>
+    <a href="#" class="waves-effect btn-flat modal-close">Agree</a>
+  </div>
+{/block}
+{block scripts}
+{include parent}
+<script>
+$(document).ready(function(){
+	$("#submit").click(function(){
+		$("#frm-signUpForm-send").click();
+	});
+	$("#frm-signUpForm-send").css("display", "none");
+
+	$(".modal-close").click(function(){
+		$('#modal1').closeModal();
+		$("#frm-signUpForm-agree").click();
+		if($("#frm-signUpForm-agree").is(':checked'))
+			$(".modal-close").text("disagree")
+		else 
+			$(".modal-close").text("agree")
+	});
+	 $('#frm-signUpForm-email').val(' ');
+	
+});
+</script>
+
+{/block}

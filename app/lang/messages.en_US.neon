@@ -1,0 +1,42 @@
+homepage:
+    settings: "settings"
+    login: "login"
+    logout: "log out"
+    signin: "sign in"
+    name: "name"
+    surname: "surname"
+    pass: "password"
+    wishlist: "wishlist"
+    home: "home"
+    signup: "Sign up"
+    informations: "informations"
+    state: "state"
+    birthdate: "birth date"
+
+profile:
+	profile: "profile"
+	friends: "friends"
+	findfriends: "find friends"
+	edit: "edit"
+
+months:
+    jan: "january"
+    feb: "february"
+    mar: "march"
+    apr: "april"
+    maj: "may"
+    jun: "jun"
+    jul: "july"
+    aug: "august"
+    sep: "september"
+    okt: "october"
+    nov: "november"
+    dec: "december"
+
+forms:
+    year: "Select year"
+    month: "Select month"
+    day:   "Select day"
+    state:  "Fill state"
+    name:   "Fill name"
+    surname:    "Fill surname"

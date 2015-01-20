@@ -1,0 +1,74 @@
+{block content}
+
+<div class="col s12 m12 l12 settings">
+{form settingsForm}
+<div class="z-depth-2 card-panel" style="padding-top: 50px !important">
+	<div class="row">
+		<div class="row">
+			<div class="col l6 m12 s12">
+				<div class="col s12 m12 l12 input-field margin-top-15">
+					{label name /}{input name}
+				</div>
+				<div class="col s12 m12 l12 input-field margin-top-15">
+					{label surname /}{input surname}
+				</div>
+				<div class="col l12 m12 s12 margin-top-15">
+					{label state /}{input state}
+				</div>
+				<div class="col l12 m12 s12 margin-top-15">
+					{label sex /}{input sex}
+				</div>
+				
+				<div class="col s12 m12 l12 margin-top-15">
+					{label date /}{input date}
+				</div>
+				{* <div class="col s12 m12 l12">
+					{input birth_year}
+				</div>
+				<div class="col s12 m12 l12">
+					{input birth_month}
+				</div>
+				<div class="col s12 m12 l12">
+					{input birth_day}
+				</div> *}
+			</div>
+			<div class="col l6 m12 s12">
+				<div class="col s12 m12 l12"><b>{label image /}</b></div>
+				<div class="col s12 m12 l12  input-field" style="margin-top: 15px;">{input image}</div>
+				<div class="col s12 m12 l12">
+				{var $url = "images/upload/profile/".$image.".png";}
+					<img style="margin-top: 25px;" id="preview" class="responsive-img materialboxed" width="400" src="{$basePath}/{$url}"/>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col s12 m4 l4 offset-l4 offset-m4"  style="margin-top: 30px;">
+				{input send}
+			</div>
+		</div>
+	</div>
+	<br>
+</div>
+{/form}
+</div>
+{/block}
+{block scripts}
+{include parent}
+<script type="text/javascript">
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#preview').attr('src', e.target.result);
+                $('#preview').css("display","block");
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(document).ready(function(){
+		if({$image} == "")
+			$('#preview').css("display","none");
+		});
+</script>
+{/block}
